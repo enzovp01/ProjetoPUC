@@ -98,6 +98,23 @@ app.post("/auth/register", async (req, res) => {
   }
 });
 
+app.get("/userByUsername/:username", async (req, res) => {
+  const username = req.params.username;
+
+  try {
+    // Buscar usuário pelo nome de usuário
+    const user = await User.findOne({ name: username }, "-password");
+
+    if (!user) {
+      return res.status(404).json({ msg: "Usuário não encontrado!" });
+    }
+
+    res.status(200).json({ user });
+  } catch (error) {
+    res.status(500).json({ msg: error });
+  }
+});
+
 app.post("/auth/login", async (req, res) => {
   const { email, password } = req.body;
 
