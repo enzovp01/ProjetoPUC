@@ -163,10 +163,9 @@ const dbPassword = 'Teste123';
 
 mongoose
   .connect(
-    `mongodb+srv://${dbUser}:${dbPassword}@cluster0.kvxkpcl.mongodb.net/`
+    `mongodb+srv://${dbUser}:${dbPassword}@cluster0.kvxkpcl.mongodb.net/`, { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then(() => {
     console.log("Conectou ao banco!");
-    app.listen(3000);
   })
   .catch((err) => console.log(err));
