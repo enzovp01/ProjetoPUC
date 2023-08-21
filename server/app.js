@@ -5,6 +5,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const app = express();
+const port = process.env.port || 3000
+
 
 // models
 const User = require("./models/User");
@@ -166,6 +168,8 @@ mongoose
     `mongodb+srv://${dbUser}:${dbPassword}@cluster0.kvxkpcl.mongodb.net/`, { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then(() => {
+    app.listen(port)
     console.log("Conectou ao banco!");
+
   })
   .catch((err) => console.log(err));
