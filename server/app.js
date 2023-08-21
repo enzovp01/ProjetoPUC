@@ -20,7 +20,7 @@ app.get("/", (req, res) => {
 // Private Route
 app.get("/user/:id", checkToken, async (req, res) => {
   const id = req.params.id;
-
+//a 
   // check if user exists
   const user = await User.findById(id, "-password");
 
