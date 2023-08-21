@@ -14,7 +14,7 @@ app.use(express.json());
 
 // Open Route
 app.get("/", (req, res) => {
- return res.status(200).json({ msg: "Bem vindo a API!" });
+ return res.json({ success: true,message: "Bem vindo a API!" });
 });
 
 // Private Route
