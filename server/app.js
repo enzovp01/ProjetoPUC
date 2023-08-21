@@ -14,7 +14,7 @@ app.use(express.json());
 
 // Open Route
 app.get("/", (req, res) => {
-  res.status(200).json({ msg: "Bem vindo a API!" });
+ return res.status(200).json({ msg: "Bem vindo a API!" });
 });
 
 // Private Route
@@ -140,8 +140,9 @@ app.post("/auth/login", async (req, res) => {
   }
 });
 
-const dbUser = process.env.DB_USER;
-const dbPassword = process.env.DB_PASS;
+//Retirei o dotenv
+const dbUser = 'Enzovp01';
+const dbPassword = 'Teste123';
 
 mongoose
   .connect(
