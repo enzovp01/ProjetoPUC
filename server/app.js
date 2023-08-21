@@ -98,7 +98,7 @@ app.post("/auth/register", async (req, res) => {
   }
 });
 
-app.get("/userByUsername/:username", async (req, res) => {
+app.get("/listarUsuario/:username", async (req, res) => {
   const username = req.params.username;
 
   try {

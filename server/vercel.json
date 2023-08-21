@@ -1,16 +1,9 @@
 {
     "name": "projetopuc",
-    "version" : 2,
-    "public" : true,
-    "build" : {
-        "src" : "nodemon app.js",
-        "use" : "@vercel/node"
-    },
-    "routes": [
-        {
-            "src" : "/(.*)",
-            "dest" : "nodemon app.js"
-
-        }
-    ]
-}
+    "version": 2,
+    "public": true,
+    "build": {
+      "src": "node app.js",
+      "use": "@vercel/node"
+    }
+  }
