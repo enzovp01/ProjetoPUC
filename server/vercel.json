@@ -1,9 +1,15 @@
 {
-    "name": "projetopuc",
     "version": 2,
-    "public": true,
-    "build": {
-      "src": "node app.js",
-      "use": "@vercel/node"
-    }
-  }
+    "builds": [
+        {
+            "src": "node app.js",
+            "use": "@vercel/node"
+        }
+    ],
+    "routes": [
+        {
+            "src" : "/(.*)",
+            "dest" : "/"
+        }
+    ]
+}
