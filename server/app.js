@@ -10,6 +10,7 @@ const port = process.env.PORT || 3000
 
 // models
 const User = require("./models/User");
+const Task = require("./models/Task")
 
 // Config JSON response
 app.use(express.json());
@@ -20,7 +21,7 @@ app.get("/", (req, res) => {
 });
 
 // Private Route
-app.get("/user/:id", checkToken, async (req, res) => {
+app.get("/auth/userCheck/:id", checkToken, async (req, res) => {
   const id = req.params.id;
 
   // check if user exists
@@ -100,7 +101,7 @@ app.post("/auth/register", async (req, res) => {
   }
 });
 
-app.get("/listarUsuario/:username", async (req, res) => {
+app.get("/auth/listUser/:username", async (req, res) => {
   const username = req.params.username;
 
   try {
@@ -116,6 +117,8 @@ app.get("/listarUsuario/:username", async (req, res) => {
     res.status(500).json({ msg: error });
   }
 });
+
+
 
 app.post("/auth/login", async (req, res) => {
   const { email, password } = req.body;
@@ -138,6 +141,8 @@ app.post("/auth/login", async (req, res) => {
 
   // check if password match
   const checkPassword = await bcrypt.compare(password, user.password);
+  const userId = user.id;
+  
 
   if (!checkPassword) {
     return res.status(422).json({ msg: "Senha inválida" });
@@ -152,10 +157,76 @@ app.post("/auth/login", async (req, res) => {
       },
       secret
     );
+    
 
-    res.status(200).json({ msg: "Autenticação realizada com sucesso!", token });
+    res.status(200).json({ msg: "Autenticação realizada com sucesso!", token, userId});
   } catch (error) {
     res.status(500).json({ msg: error });
+  }
+});
+
+//referente as task
+app.post("/task/create", async (req, res) => {
+  const { title, description , conclusion, status, userId } = req.body;
+
+  // validations
+  if (!title) {
+    return res.status(422).json({ msg: "O titulo é obrigatório!" });
+  }
+
+  if (!description) {
+    return res.status(422).json({ msg: "A descrição é obrigatoria" });
+  }
+
+  if (!conclusion) {
+    return res.status(422).json({ msg: "A data de conclusão é obrigatória" });
+  }
+  if (!status) {
+    return res.status(422).json({ msg: "O status é obrigatório!" });
+  }
+  if (!userId) {
+    return res.status(422).json({ msg: "O userid é obrigatório" });
+  }
+
+  // create task
+  const task = new Task({
+    title,
+    description,
+    conclusion,
+    status,
+    userId
+  });
+
+  try {
+    await task.save();
+
+    res.status(201).json({ msg: "Tarefa criada com sucesso!" });
+  } catch (error) {
+    res.status(500).json({ msg: error });
+  }
+});
+
+app.get('/task/listAll/:userId', async (req, res) => {
+  const userId = req.params.userId;
+
+  try {
+    const tasks = await Task.find({ userId }); // Busca as tarefas pelo userId
+    res.json(tasks);
+  } catch (error) {
+    console.error('Erro ao buscar tarefas:', error);
+    res.status(500).json({ message: 'Erro no servidor' });
+  }
+});
+
+app.post('/task/listStatus', async (req, res) => {
+  const { userId, status } = req.body;
+  try {
+    const tasks = await Task.find({userId, status }); // Filtra por userId e status
+    
+    res.json(tasks);
+  } catch (error) {
+    console.error('Erro ao buscar tarefas:', error);
+    res.status(500).json({ message: 'Erro no servidor' });
   }
 });
 
